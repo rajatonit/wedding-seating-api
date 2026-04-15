@@ -192,6 +192,7 @@ app.post(
     }
 
     const email = (gPayload.email || '').toLowerCase().trim();
+    console.log(`Email: ${email}`);
 
     if (email && !ADMIN_EMAIL_LOWER.includes(email)) {
       console.log(`${email} is not authorised as admin for this wedding.`);
@@ -410,6 +411,7 @@ app.use((err, _req, res, _next) => {
 
 app.listen(PORT, () => {
   console.log(`✦ Wedding API  port=${PORT}  admin=${ADMIN_EMAIL}`);
+  console.log(`Admin emails: ${ADMIN_EMAIL_LOWER}`);
 });
 
 function uid() {
