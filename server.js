@@ -31,7 +31,7 @@ const {
   if (!v) throw new Error(`${k} env var is required`);
 });
 
-const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim();
+const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().split(',').trim();
 const SESSION_TTL = '8h';
 const DOC_ID = 'main_seating';
 
@@ -193,7 +193,7 @@ app.post(
 
     const email = (gPayload.email || '').toLowerCase().trim();
 
-    if (email !== ADMIN_EMAIL_LOWER) {
+    if (email && !ADMIN_EMAIL_LOWER.includes(email)) {
       return res.status(403).json({
         error: `${gPayload.email} is not authorised as admin for this wedding.`,
       });
