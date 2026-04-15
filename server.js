@@ -14,8 +14,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const {
   PORT = 3000,
   MONGO_URI,
-  DB_NAME = 'wedding',
-  COLLECTION = 'seating-v1',
+  DB_NAME = 'wedding-seating',
+  COLLECTION = 'seating',
   JWT_SECRET, // sign session JWTs — generate: openssl rand -hex 32
   GOOGLE_CLIENT_ID, // from Google Cloud Console (OAuth 2.0 Web Client)
   ADMIN_EMAIL, // Google account email allowed to administer the site
@@ -128,11 +128,9 @@ function requireAdmin(req, res, next) {
     req.admin = p;
     next();
   } catch {
-    res
-      .status(401)
-      .json({
-        error: 'Session token invalid or expired — please sign in again',
-      });
+    res.status(401).json({
+      error: 'Session token invalid or expired — please sign in again',
+    });
   }
 }
 

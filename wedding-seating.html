@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#060411">
+<title>Wedding Reception</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+/* ── Reset ──────────────────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#060411;--surf:#0d0920;--surf2:#110e26;
+  --gold:#c8a86b;--gold2:#e5d09a;--gold3:#a07840;
+  --golda:rgba(200,168,107,.22);--goldb:rgba(200,168,107,.10);
+  --cream:#ede8dc;--dim:rgba(237,232,220,.55);--dim2:rgba(237,232,220,.28);
+  --border:rgba(200,168,107,.18);--border2:rgba(200,168,107,.08);
+  --err:#d97070;--errbg:rgba(217,112,112,.08);--errbdr:rgba(217,112,112,.28);
+  --ok:#6db88a;--okbg:rgba(109,184,138,.08);--okbdr:rgba(109,184,138,.28);
+  --ff:'Cormorant Garamond',serif;--fb:'Raleway',sans-serif;
+  --r-sm:10px;--r-md:16px;--r-lg:24px;--r-full:9999px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+html{height:100%;scroll-behavior:smooth;}
+body{min-height:100%;background:var(--bg);color:var(--cream);font-family:var(--fb);font-weight:300;line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(200,168,107,.06),transparent 55%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(200,168,107,.03),transparent 60%);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+h1,h2,h3,h4{font-family:var(--ff);font-weight:400;}
+#app{position:relative;z-index:1;}
+
+/* ── Loading ─────────────────────────────────────────────────────── */
+#loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:999;transition:opacity .7s,visibility .7s;}
+#loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.ld-ring{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--border);border-top-color:var(--gold);animation:spin .9s linear infinite;}
+.ld-text{font-family:var(--ff);font-size:20px;font-style:italic;color:var(--dim);text-align:center;}
+.ld-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim2);margin-top:-6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── Views ──────────────────────────────────────────────────────── */
+.view{display:none;animation:viewIn .4s ease;}
+.view.active{display:block;}
+@keyframes viewIn{from{opacity:0;}to{opacity:1;}}
+
+/* ── Florals (desktop only) ─────────────────────────────────────── */
+.floral-side{position:fixed;top:0;height:100vh;width:72px;pointer-events:none;color:var(--gold);opacity:.07;z-index:0;}
+.floral-left{left:0;}.floral-right{right:0;transform:scaleX(-1);}
+.floral-side svg{width:100%;height:100%;}
+@media(max-width:600px){.floral-side{display:none;}}
+
+/* ════════════════════════════════════════════════════════════════
+   GUEST VIEW
+════════════════════════════════════════════════════════════════ */
+#guest-view{min-height:100vh;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;}
+
+/* ── Hero ────────────────────────────────────────────────────────── */
+.hero{
+  width:100%;max-width:680px;
+  padding:clamp(40px,8vw,72px) 20px clamp(36px,6vw,52px);
+  text-align:center;position:relative;
+}
+.hero::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:1px;height:28px;background:linear-gradient(to bottom,var(--golda),transparent);
+}
+.hero-welcome{
+  font-size:clamp(10px,2.5vw,12px);letter-spacing:clamp(4px,1.5vw,8px);
+  text-transform:uppercase;color:var(--gold);opacity:.85;
+  font-family:var(--fb);font-weight:400;
+  margin-bottom:clamp(14px,3vw,22px);
+}
+.hero-reception{
+  font-family:var(--ff);
+  font-size:clamp(46px,14vw,96px);
+  font-weight:300;line-height:.95;
+  color:var(--cream);
+  margin-bottom:clamp(18px,4vw,28px);
+}
+.hero-reception em{
+  font-style:italic;color:var(--gold);display:block;
+  font-size:clamp(30px,9vw,60px);margin-top:4px;
+}
+.ornament{
+  display:flex;align-items:center;gap:12px;
+  max-width:300px;margin:0 auto clamp(18px,4vw,26px);
+}
+.ornament-line{flex:1;height:1px;}
+.ornament-line:first-child{background:linear-gradient(to right,transparent,var(--golda));}
+.ornament-line:last-child{background:linear-gradient(to left,transparent,var(--golda));}
+.ornament-gem{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+.ornament-gem-sm{width:3px;height:3px;background:var(--gold3);transform:rotate(45deg);flex-shrink:0;margin:0 -3px;}
+.hero-names{
+  font-family:var(--ff);
+  font-size:clamp(26px,7vw,52px);
+  font-weight:300;color:var(--gold2);
+  margin-bottom:6px;line-height:1.15;
+}
+.hero-amp{color:var(--gold);font-style:italic;margin:0 6px;}
+.hero-date{
+  font-family:var(--ff);font-size:clamp(14px,3.5vw,18px);
+  font-style:italic;color:var(--dim);margin-top:4px;
+}
+.hero-venue{
+  font-size:clamp(9px,2vw,11px);letter-spacing:3px;
+  text-transform:uppercase;color:var(--dim2);margin-top:6px;
+}
+
+/* ── Search ──────────────────────────────────────────────────────── */
+.search-section{
+  width:100%;max-width:580px;
+  padding:clamp(12px,3vw,18px) clamp(16px,5vw,28px) clamp(24px,5vw,40px);
+}
+.search-container{position:relative;}
+.search-input{
+  width:100%;
+  padding:clamp(14px,3.5vw,17px) 54px clamp(14px,3.5vw,17px) clamp(20px,4vw,26px);
+  background:rgba(255,255,255,.05);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-full);
+  color:var(--cream);font-family:var(--fb);
+  font-size:clamp(15px,4vw,17px);
+  font-weight:300;outline:none;transition:all .3s;
+  /* Prevent iOS zoom on focus */
+  font-size:max(16px, clamp(15px,4vw,17px));
+}
+.search-input::placeholder{color:var(--dim2);}
+.search-input:focus{
+  border-color:var(--gold);
+  background:rgba(255,255,255,.07);
+  box-shadow:0 0 0 3px rgba(200,168,107,.1);
+}
+.search-icon{
+  position:absolute;right:20px;top:50%;transform:translateY(-50%);
+  color:var(--gold);opacity:.65;pointer-events:none;font-size:18px;
+}
+.search-results{margin-top:12px;animation:slideIn .22s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+.result-card{
+  padding:clamp(14px,3.5vw,18px) clamp(16px,4vw,20px);
+  background:linear-gradient(135deg,rgba(200,168,107,.09),rgba(200,168,107,.04));
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:10px;cursor:pointer;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  /* Large touch target */
+  min-height:72px;
+}
+.result-card:active{background:linear-gradient(135deg,rgba(200,168,107,.18),rgba(200,168,107,.1));transform:scale(.98);}
+@media(hover:hover){.result-card:hover{background:linear-gradient(135deg,rgba(200,168,107,.15),rgba(200,168,107,.07));transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35);}}
+.result-icon{
+  width:clamp(40px,10vw,48px);height:clamp(40px,10vw,48px);
+  border-radius:50%;background:rgba(200,168,107,.1);
+  border:1px solid var(--golda);display:flex;align-items:center;
+  justify-content:center;font-size:clamp(18px,4.5vw,22px);flex-shrink:0;
+}
+.result-name{font-family:var(--ff);font-size:clamp(20px,5vw,24px);color:var(--cream);margin-bottom:2px;}
+.result-table{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+.no-results{text-align:center;padding:24px 16px;color:var(--dim);font-family:var(--ff);font-size:clamp(17px,4.5vw,20px);font-style:italic;}
+
+/* ── Map Section ─────────────────────────────────────────────────── */
+.map-section{width:100%;padding:0 0 clamp(80px,15vw,100px);}
+.map-header{text-align:center;margin-bottom:clamp(16px,4vw,24px);padding:0 20px;}
+.map-header h2{font-family:var(--ff);font-size:clamp(22px,6vw,30px);font-weight:400;}
+.map-header p{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim2);margin-top:4px;}
+/* Hide "hover" hint on touch devices */
+@media(hover:none){.map-header p{display:none;}}
+
+.map-outer{
+  background:rgba(5,3,18,.9);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+/* On desktop show as a contained rounded box */
+@media(min-width:600px){
+  .map-outer{
+    max-width:1400px;margin:0 auto;
+    border:1px solid var(--border);border-radius:var(--r-lg);
+  }
+}
+.map-outer::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 55% 55% at 50% 50%,rgba(200,168,107,.025),transparent 65%),
+    repeating-linear-gradient(0deg,  transparent,transparent 39px,rgba(200,168,107,.04) 39px,rgba(200,168,107,.04) 40px),
+    repeating-linear-gradient(90deg, transparent,transparent 39px,rgba(200,168,107,.04) 39px,rgba(200,168,107,.04) 40px);
+}
+/* Touch-friendly scroll container */
+.map-scroll{
+  overflow:auto;position:relative;z-index:1;
+  -webkit-overflow-scrolling:touch;
+  cursor:grab;
+}
+.map-scroll:active{cursor:grabbing;}
+.map-stage{position:relative;width:1420px;height:760px;}
+
+/* Scroll hint arrows on mobile */
+.map-scroll-hint{
+  display:none;
+  position:absolute;bottom:10px;right:14px;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--dim2);pointer-events:none;z-index:5;
+  animation:hintFade 2s ease-in-out 1.5s forwards;
+}
+@media(max-width:599px){.map-scroll-hint{display:block;}}
+@keyframes hintFade{from{opacity:1;}to{opacity:0;}}
+
+/* ── Table Nodes (guest) ─────────────────────────────────────────── */
+.table-node{
+  position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;
+  cursor:default;z-index:2;transition:transform .18s;
+}
+.table-node-inner{position:relative;width:110px;height:110px;}
+.table-circle{
+  position:absolute;left:18px;top:18px;
+  width:74px;height:74px;border-radius:50%;
+  border:1.5px solid rgba(200,168,107,.22);
+  background:rgba(255,255,255,.03);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:all .4s;box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+.table-circle.highlighted{
+  border-color:var(--gold);background:rgba(200,168,107,.1);
+  animation:tablePulse 2.2s ease-in-out infinite;
+}
+@keyframes tablePulse{
+  0%,100%{box-shadow:0 0 22px rgba(200,168,107,.45),0 0 48px rgba(200,168,107,.15);}
+  50%{box-shadow:0 0 38px rgba(200,168,107,.65),0 0 80px rgba(200,168,107,.28);}
+}
+.table-count{font-size:9px;color:var(--dim2);letter-spacing:1px;font-family:var(--fb);transition:color .4s;text-align:center;}
+.highlighted .table-count{color:var(--gold2);}
+.seat-dot{position:absolute;width:9px;height:9px;border-radius:50%;background:rgba(200,168,107,.25);border:1px solid rgba(200,168,107,.4);transition:all .4s;}
+.table-node.highlighted .seat-dot{background:rgba(200,168,107,.65);border-color:var(--gold);}
+.table-label{margin-top:5px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim2);text-align:center;white-space:nowrap;font-family:var(--fb);transition:color .4s;}
+.table-node.highlighted .table-label{color:var(--gold);}
+
+/* Tooltip — desktop only */
+.table-tooltip{
+  position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:rgba(6,4,17,.98);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:13px 17px;min-width:155px;max-width:210px;
+  z-index:50;pointer-events:none;
+  box-shadow:0 12px 44px rgba(0,0,0,.7);animation:fadeIn .14s ease;
+}
+@media(hover:none){.table-tooltip{display:none;}}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(-4px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.table-tooltip h4{font-family:var(--ff);font-size:15px;font-weight:400;color:var(--gold2);margin-bottom:8px;border-bottom:1px solid var(--border2);padding-bottom:6px;}
+.tooltip-guest{font-size:11px;color:var(--dim);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.tooltip-guest:last-child{border-bottom:none;}
+.tooltip-guest.match{color:var(--gold2);font-weight:500;}
+.tooltip-guest.match::before{content:'✦ ';font-size:8px;}
+
+/* ── Table drawer (mobile tap-to-expand) ─────────────────────────── */
+.table-drawer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(8,5,20,.97);
+  border-top:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  padding:0 20px calc(20px + var(--safe-bottom));
+  z-index:60;
+  transform:translateY(100%);
+  transition:transform .3s cubic-bezier(.32,1,.44,1);
+  max-height:65vh;overflow-y:auto;
+}
+.table-drawer.open{transform:translateY(0);}
+.drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px;}
+.drawer-title{font-family:var(--ff);font-size:22px;font-weight:400;color:var(--gold2);margin-bottom:12px;border-bottom:1px solid var(--border2);padding-bottom:10px;}
+.drawer-guest{font-size:13px;color:var(--dim);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.drawer-guest:last-child{border-bottom:none;}
+.drawer-guest.match{color:var(--gold2);font-weight:500;}
+.drawer-guest.match::before{content:'✦ ';font-size:9px;}
+.drawer-backdrop{position:fixed;inset:0;z-index:59;display:none;}
+.drawer-backdrop.active{display:block;}
+/* Only show drawer affordance on touch */
+@media(hover:hover){.table-node{cursor:default;}}
+@media(hover:none){.table-node{cursor:pointer;}}
+
+/* ── Admin gear btn ─────────────────────────────────────────────── */
+.admin-gear-btn{
+  position:fixed;
+  bottom:calc(24px + var(--safe-bottom));
+  right:20px;
+  width:48px;height:48px;
+  border-radius:50%;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:var(--dim2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;transition:all .22s;z-index:50;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+.admin-gear-btn:active{background:rgba(200,168,107,.12);color:var(--gold);transform:scale(.94);}
+@media(hover:hover){.admin-gear-btn:hover{background:rgba(200,168,107,.1);border-color:var(--golda);color:var(--gold);transform:rotate(30deg);}}
+
+/* ════════════════════════════════════════════════════════════════
+   MODAL
+════════════════════════════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(10px);
+  z-index:100;display:flex;align-items:center;justify-content:center;
+  padding:20px;animation:fadeOverlay .25s ease;
+}
+.modal-overlay.hidden{display:none;}
+@keyframes fadeOverlay{from{opacity:0;}to{opacity:1;}}
+.modal-card{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:clamp(32px,8vw,48px) clamp(24px,7vw,44px);
+  width:100%;max-width:400px;text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.7);
+}
+.modal-card h2{font-size:clamp(26px,7vw,32px);margin-bottom:8px;}
+.modal-sub{color:var(--dim2);font-size:13px;margin-bottom:clamp(24px,6vw,36px);line-height:1.6;}
+.google-btn-container{display:flex;justify-content:center;margin-bottom:14px;}
+.signin-note{font-size:11px;color:var(--dim2);line-height:1.6;max-width:260px;margin:0 auto;}
+.error-banner{background:var(--errbg);border:1px solid var(--errbdr);border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:var(--err);margin-top:12px;display:none;text-align:left;line-height:1.5;}
+.spinner{width:22px;height:22px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px;}
+
+/* ════════════════════════════════════════════════════════════════
+   FORMS & BUTTONS
+════════════════════════════════════════════════════════════════ */
+.form-label{display:block;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim2);margin-bottom:8px;}
+.form-input{
+  width:100%;padding:13px 15px;
+  background:rgba(255,255,255,.05);border:1.5px solid var(--border);
+  border-radius:var(--r-sm);color:var(--cream);
+  font-family:var(--fb);font-size:16px;font-weight:300;
+  outline:none;transition:all .2s;margin-bottom:16px;
+  /* No iOS zoom */
+  -webkit-appearance:none;appearance:none;
+}
+.form-input:focus{border-color:var(--gold);background:rgba(255,255,255,.07);box-shadow:0 0 0 3px rgba(200,168,107,.07);}
+.hint-text{font-size:11px;color:var(--dim2);line-height:1.7;margin-top:-10px;margin-bottom:14px;}
+code{background:rgba(200,168,107,.1);color:var(--gold);padding:1px 6px;border-radius:4px;font-size:11px;}
+
+.btn{
+  padding:13px 26px;border-radius:var(--r-full);
+  font-family:var(--fb);font-size:11px;font-weight:500;
+  letter-spacing:1.8px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;border:none;outline:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:46px;
+}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-primary{background:var(--gold);color:#07050f;}.btn-primary:active{background:var(--gold2);}
+@media(hover:hover){.btn-primary:hover:not(:disabled){background:var(--gold2);box-shadow:0 6px 22px rgba(200,168,107,.3);}}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--dim);}
+.btn-ghost:active{border-color:var(--golda);color:var(--cream);}
+@media(hover:hover){.btn-ghost:hover:not(:disabled){border-color:var(--golda);color:var(--cream);}}
+.btn-danger{background:var(--errbg);border:1px solid var(--errbdr);color:var(--err);}
+.btn-sm{padding:10px 18px;font-size:10px;min-height:40px;}.btn-icon{padding:10px 14px;min-height:40px;min-width:40px;}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* ════════════════════════════════════════════════════════════════
+   ADMIN VIEW
+════════════════════════════════════════════════════════════════ */
+#admin-view{display:none;min-height:100vh;flex-direction:column;}
+#admin-view.active{display:flex;}
+
+/* Admin Header */
+.admin-header{
+  padding:clamp(10px,2.5vw,14px) clamp(14px,4vw,24px);
+  padding-top:calc(clamp(10px,2.5vw,14px) + var(--safe-top));
+  border-bottom:1px solid var(--border);
+  background:rgba(8,5,18,.96);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:blur(14px);
+}
+.admin-header-left{display:flex;align-items:center;gap:12px;min-width:0;}
+.admin-avatar{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--golda);object-fit:cover;flex-shrink:0;}
+.admin-avatar-placeholder{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--golda);background:var(--goldb);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.admin-user-info{display:flex;flex-direction:column;min-width:0;}
+.admin-user-name{font-size:13px;color:var(--cream);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.admin-user-email{font-size:10px;color:var(--dim2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.admin-header-right{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.sync-indicator{font-size:11px;letter-spacing:1px;color:var(--dim2);display:flex;align-items:center;gap:6px;}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--dim2);}
+.sync-dot.saving{background:var(--gold);animation:syncPulse .8s ease-in-out infinite;}
+.sync-dot.saved{background:var(--ok);}
+.sync-dot.error{background:var(--err);}
+@keyframes syncPulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+
+/* Admin Body */
+.admin-body{flex:1;display:flex;overflow:hidden;min-height:0;}
+
+/* Sidebar */
+.admin-sidebar{
+  width:320px;flex-shrink:0;
+  border-right:1px solid var(--border);
+  overflow-y:auto;display:flex;flex-direction:column;
+}
+.sidebar-tabs{display:flex;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);flex-shrink:0;}
+.sidebar-tab{
+  flex:1;padding:14px 6px;
+  font-family:var(--fb);font-size:9px;font-weight:500;letter-spacing:1.8px;
+  text-transform:uppercase;color:var(--dim2);cursor:pointer;
+  border:none;background:transparent;border-bottom:2px solid transparent;transition:all .2s;
+  min-height:46px;
+}
+.sidebar-tab:hover{color:var(--cream);}.sidebar-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.sidebar-content{padding:18px;flex:1;overflow-y:auto;}
+.section-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border2);}
+.section+.section{margin-top:26px;}
+
+.table-list-item{
+  padding:12px 14px;border-radius:var(--r-sm);border:1.5px solid transparent;
+  margin-bottom:6px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .2s;background:rgba(255,255,255,.02);min-height:50px;
+}
+.table-list-item:active{background:rgba(255,255,255,.05);border-color:var(--border2);}
+@media(hover:hover){.table-list-item:hover{background:rgba(255,255,255,.05);border-color:var(--border2);}}
+.table-list-item.selected{background:rgba(200,168,107,.07);border-color:var(--golda);}
+.table-list-name{font-family:var(--ff);font-size:17px;}
+.table-list-count{font-size:11px;color:var(--dim2);}
+.add-row{display:flex;gap:8px;margin-top:12px;align-items:flex-start;}
+.add-row .form-input{margin-bottom:0;flex:1;}
+.guest-list{margin-top:6px;margin-bottom:14px;}
+.guest-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.guest-row:last-child{border-bottom:none;}
+.guest-row-name{flex:1;font-size:13px;color:var(--cream);}
+.remove-btn{
+  background:none;border:none;color:var(--err);cursor:pointer;
+  font-size:22px;line-height:1;opacity:.55;transition:opacity .2s;
+  flex-shrink:0;padding:4px 6px;min-width:36px;min-height:36px;
+  display:flex;align-items:center;justify-content:center;
+}
+.remove-btn:hover{opacity:1;}
+.no-guests{color:var(--dim2);font-size:13px;font-style:italic;padding:8px 0;}
+
+/* Admin Map Area */
+.admin-map-area{flex:1;display:flex;flex-direction:column;padding:16px;overflow:hidden;min-width:0;}
+.admin-map-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.admin-map-header h3{font-size:20px;font-weight:400;}
+.admin-map-header p{font-size:11px;color:var(--dim2);letter-spacing:.4px;margin-top:2px;}
+.admin-map-canvas{flex:1;position:relative;overflow:hidden;background:rgba(5,3,18,.8);border:1px solid var(--border);border-radius:var(--r-md);min-height:340px;}
+.admin-map-canvas::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(200,168,107,.05) 39px,rgba(200,168,107,.05) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(200,168,107,.05) 39px,rgba(200,168,107,.05) 40px);}
+.admin-map-inner{position:absolute;inset:0;overflow:auto;z-index:1;-webkit-overflow-scrolling:touch;}
+.admin-stage{position:relative;min-width:1420px;min-height:760px;width:100%;height:100%;}
+.admin-table-node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;cursor:grab;user-select:none;z-index:2;}
+.admin-table-node:active{cursor:grabbing;}
+.admin-table-node.selected .table-circle{border-color:var(--gold);background:rgba(200,168,107,.12);box-shadow:0 0 18px rgba(200,168,107,.38);}
+.admin-table-node.selected .table-label{color:var(--gold);}
+.map-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:1px;color:var(--dim2);text-transform:uppercase;}
+.legend-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--golda);background:rgba(200,168,107,.18);flex-shrink:0;}
+
+/* ── Mobile admin layout ──────────────────────────────────────────── */
+@media(max-width:680px){
+  .admin-body{flex-direction:column;}
+  .admin-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);max-height:48vh;}
+  .admin-map-area{padding:12px;}
+  .admin-map-canvas{min-height:300px;}
+  /* Hide sync label text on small screens, keep dot */
+  .sync-indicator span{display:none;}
+  /* Smaller header buttons */
+  .admin-header-right .btn-sm{padding:9px 12px;font-size:9px;}
+}
+@media(max-width:400px){
+  .admin-header{flex-wrap:wrap;}
+  .admin-user-email{display:none;}
+}
+
+/* ── Toast ───────────────────────────────────────────────────────── */
+.toast{
+  position:fixed;
+  bottom:calc(20px + var(--safe-bottom));
+  left:50%;transform:translateX(-50%);
+  padding:12px 28px;border-radius:var(--r-full);
+  font-family:var(--fb);font-size:11px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  z-index:200;animation:toastIn .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;
+  max-width:calc(100vw - 40px);overflow:hidden;text-overflow:ellipsis;
+}
+.toast.hidden{display:none;}
+.toast.gold{background:var(--gold);color:#07050f;box-shadow:0 8px 28px rgba(200,168,107,.4);}
+.toast.error{background:var(--err);color:#fff;box-shadow:0 8px 28px rgba(217,112,112,.4);}
+.toast.ok{background:var(--ok);color:#07050f;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px) scale(.92);}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}}
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading-screen">
+  <div class="ld-ring"></div>
+  <p class="ld-text">One moment…</p>
+  <p class="ld-sub" id="loading-sub">Loading seating data</p>
+</div>
+
+<!-- Florals (desktop) -->
+<div class="floral-side floral-left" aria-hidden="true"><svg viewBox="0 0 72 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M36 590 Q40 500 36 410 Q32 330 36 250 Q40 180 36 110 Q32 65 36 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M36 450 Q10 427 3 404 Q20 398 36 424" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 368 Q62 345 70 322 Q53 316 36 342" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 286 Q10 263 3 240 Q20 234 36 260" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 204 Q62 181 70 158 Q53 152 36 178" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 128 Q10 106 3 84 Q20 78 36 104" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><circle cx="36" cy="20" r="14" stroke="currentColor" stroke-width="1" fill="currentColor" fill-opacity=".15"/><circle cx="36" cy="20" r="6" fill="currentColor" fill-opacity=".4"/></svg></div>
+<div class="floral-side floral-right" aria-hidden="true"><svg viewBox="0 0 72 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M36 590 Q40 500 36 410 Q32 330 36 250 Q40 180 36 110 Q32 65 36 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M36 450 Q10 427 3 404 Q20 398 36 424" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 368 Q62 345 70 322 Q53 316 36 342" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 286 Q10 263 3 240 Q20 234 36 260" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 204 Q62 181 70 158 Q53 152 36 178" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><path d="M36 128 Q10 106 3 84 Q20 78 36 104" stroke="currentColor" stroke-width=".8" fill="currentColor" fill-opacity=".4"/><circle cx="36" cy="20" r="14" stroke="currentColor" stroke-width="1" fill="currentColor" fill-opacity=".15"/><circle cx="36" cy="20" r="6" fill="currentColor" fill-opacity=".4"/></svg></div>
+
+<div id="app">
+
+  <!-- ══ GUEST VIEW ═══════════════════════════════════════════════ -->
+  <div id="guest-view" class="view active">
+
+    <!-- Hero -->
+    <header class="hero" role="banner">
+      <p class="hero-welcome">✦ &nbsp; You're invited &nbsp; ✦</p>
+      <h1 class="hero-reception">
+        Welcome to<br>
+        <em>the Reception</em>
+      </h1>
+      <div class="ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-gem-sm"></div>
+        <div class="ornament-gem"></div>
+        <div class="ornament-gem-sm"></div>
+        <div class="ornament-line"></div>
+      </div>
+      <p class="hero-names">
+        <span id="guest-name1">—</span>
+        <span class="hero-amp">&amp;</span>
+        <span id="guest-name2">—</span>
+      </p>
+      <p id="guest-date" class="hero-date"></p>
+      <p id="guest-venue" class="hero-venue"></p>
+    </header>
+
+    <!-- Search -->
+    <section class="search-section" aria-label="Guest search">
+      <div class="search-container">
+        <input
+          id="search-input"
+          class="search-input"
+          type="search"
+          placeholder="Type your name to find your seat…"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="search"
+          aria-label="Search guest name"
+        >
+        <span class="search-icon" aria-hidden="true">🔍</span>
+      </div>
+      <div id="search-results" class="search-results" role="list" aria-live="polite" style="display:none;"></div>
+    </section>
+
+    <!-- Map -->
+    <section class="map-section" aria-label="Seating map">
+      <div class="map-header">
+        <h2>Seating Map</h2>
+        <p>Hover a table to see its guests</p>
+      </div>
+      <div class="map-outer">
+        <div class="map-scroll" id="map-scroll">
+          <div id="guest-map-stage" class="map-stage" role="img" aria-label="Reception seating layout"></div>
+        </div>
+        <div class="map-scroll-hint" aria-hidden="true">← scroll to explore →</div>
+      </div>
+    </section>
+
+    <!-- Admin gear -->
+    <button class="admin-gear-btn" id="open-admin-btn" aria-label="Open admin panel">⚙</button>
+  </div>
+
+  <!-- ══ TABLE DRAWER (mobile) ════════════════════════════════════ -->
+  <div id="table-drawer" class="table-drawer" role="dialog" aria-modal="true" aria-label="Table guests">
+    <div class="drawer-handle" aria-hidden="true"></div>
+    <h3 class="drawer-title" id="drawer-title">Table</h3>
+    <div id="drawer-guests"></div>
+  </div>
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
+  <!-- ══ LOGIN MODAL ══════════════════════════════════════════════ -->
+  <div id="login-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Admin login">
+    <div class="modal-card">
+      <div id="login-idle">
+        <div style="font-size:44px;margin-bottom:16px;">💍</div>
+        <h2>Admin Access</h2>
+        <p class="modal-sub">Sign in with the authorised Google account to manage the seating chart.</p>
+        <div class="google-btn-container" id="google-btn-container"></div>
+        <p class="signin-note">Only the registered admin email will be granted access.</p>
+        <div id="login-error" class="error-banner" role="alert"></div>
+        <div style="margin-top:24px;">
+          <button class="btn btn-ghost btn-sm" id="cancel-login-btn">← Back</button>
+        </div>
+      </div>
+      <div id="login-loading" style="display:none;padding:24px 0;">
+        <div class="spinner"></div>
+        <p style="font-family:var(--ff);font-size:19px;font-style:italic;color:var(--dim);">Verifying with Google…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ADMIN VIEW ════════════════════════════════════════════════ -->
+  <div id="admin-view" class="view" role="main">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <div id="admin-avatar-wrap" class="admin-avatar-placeholder" aria-hidden="true">👤</div>
+        <div class="admin-user-info">
+          <span class="admin-user-name" id="admin-user-name">Admin</span>
+          <span class="admin-user-email" id="admin-user-email">—</span>
+        </div>
+      </div>
+      <div class="admin-header-right">
+        <div class="sync-indicator" aria-live="polite">
+          <div class="sync-dot" id="sync-dot"></div>
+          <span id="sync-label">—</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="signout-btn">Sign Out</button>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">← View</button>
+        <button class="btn btn-primary btn-sm" id="save-btn">Save</button>
+      </div>
+    </header>
+
+    <div class="admin-body">
+      <aside class="admin-sidebar" aria-label="Admin controls">
+        <div class="sidebar-tabs" role="tablist">
+          <button class="sidebar-tab active" data-tab="tables" role="tab" aria-selected="true">Tables</button>
+          <button class="sidebar-tab" data-tab="details" role="tab" aria-selected="false">Details</button>
+        </div>
+
+        <!-- Tables Tab -->
+        <div id="tab-tables" class="sidebar-content" role="tabpanel">
+          <div class="section">
+            <p class="section-title">All Tables</p>
+            <div id="table-list"></div>
+            <div class="add-row">
+              <input id="new-table-input" class="form-input" placeholder="New table name…" type="text" aria-label="New table name">
+              <button class="btn btn-primary btn-icon" id="add-table-btn" aria-label="Add table">+</button>
+            </div>
+          </div>
+          <div id="selected-table-section" class="section" style="display:none;">
+            <p class="section-title" id="selected-table-heading">Edit Table</p>
+            <label class="form-label" for="edit-table-name">Table Name</label>
+            <input id="edit-table-name" class="form-input" type="text">
+            <label class="form-label">Guests (<span id="guest-count">0</span>)</label>
+            <div id="guest-list" class="guest-list"></div>
+            <div class="add-row">
+              <input id="new-guest-input" class="form-input" placeholder="Guest name…" type="text" aria-label="New guest name" enterkeyhint="done">
+              <button class="btn btn-primary btn-icon" id="add-guest-btn" aria-label="Add guest">+</button>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn btn-danger" id="delete-table-btn" style="width:100%;">Delete This Table</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Tab -->
+        <div id="tab-details" class="sidebar-content" role="tabpanel" style="display:none;">
+          <div class="section">
+            <p class="section-title">Wedding Details</p>
+            <label class="form-label" for="cfg-name1">Person 1 Name</label>
+            <input id="cfg-name1" class="form-input" type="text" autocomplete="off">
+            <label class="form-label" for="cfg-name2">Person 2 Name</label>
+            <input id="cfg-name2" class="form-input" type="text" autocomplete="off">
+            <label class="form-label" for="cfg-date">Date</label>
+            <input id="cfg-date" class="form-input" type="text" placeholder="e.g. Saturday, 14 June 2025" autocomplete="off">
+            <label class="form-label" for="cfg-venue">Venue</label>
+            <input id="cfg-venue" class="form-input" type="text" autocomplete="off">
+          </div>
+          <div class="section">
+            <p class="section-title">Data Backup</p>
+            <p class="hint-text" style="margin-top:0;">Export a JSON snapshot or restore from a backup file.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-ghost btn-sm" id="export-btn">Export JSON</button>
+              <button class="btn btn-ghost btn-sm" id="import-btn">Import JSON</button>
+              <input type="file" id="import-file" accept=".json" style="display:none;" aria-hidden="true">
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Map -->
+      <main class="admin-map-area">
+        <div class="admin-map-header">
+          <div>
+            <h3>Layout</h3>
+            <p>Drag to reposition · Tap to select</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" id="reset-layout-btn">Reset to Floor Plan</button>
+            <button class="btn btn-ghost btn-sm" id="auto-layout-btn">Auto Layout</button>
+          </div>
+        </div>
+        <div class="admin-map-canvas">
+          <div class="admin-map-inner">
+            <div id="admin-stage" class="admin-stage"></div>
+          </div>
+        </div>
+        <div class="map-legend" aria-hidden="true">
+          <div class="legend-item"><div class="legend-dot"></div>Table</div>
+          <div class="legend-item" style="color:var(--gold2);"><div class="legend-dot" style="border-color:var(--gold);background:rgba(200,168,107,.4);"></div>Selected</div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  ★  SET THESE AFTER DEPLOYING  ★
+// ══════════════════════════════════════════════════════════════════
+const API_BASE         = "https://wedding-seating-api.onrender.com/api/seating";
+const GOOGLE_CLIENT_ID = "923972852696-nl46eruiu0inbif5kdvm20rg3k8036p4.apps.googleusercontent.com";
+// ══════════════════════════════════════════════════════════════════
+
+const SS_TOKEN = "weddingAdminToken";
+const SS_USER  = "weddingAdminUser";
+const LS_CACHE = "weddingDataCache_v3";
+
+// ── State ─────────────────────────────────────────────────────────
+const S = {
+  data:           null,
+  adminToken:     sessionStorage.getItem(SS_TOKEN) || null,
+  adminUser:      (() => { try { return JSON.parse(sessionStorage.getItem(SS_USER)); } catch { return null; } })(),
+  query:          "",
+  searchResults:  null,
+  highlightTable: null,
+  selectedTableId:null,
+  dragging:       null,
+  dragSX:0, dragSY:0, origX:0, origY:0,
+};
+
+// ── Utils ─────────────────────────────────────────────────────────
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+function showToast(msg, type = "gold") {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = `toast ${type}`;
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.add("hidden"), 3400);
+}
+function setSyncStatus(s, label) {
+  const dot = document.getElementById("sync-dot"), lbl = document.getElementById("sync-label");
+  if (!dot) return; dot.className = "sync-dot " + s; lbl.textContent = label;
+}
+const localCache     = d => { try { localStorage.setItem(LS_CACHE, JSON.stringify(d)); } catch {} };
+const localCacheLoad = () => { try { const r = localStorage.getItem(LS_CACHE); return r ? JSON.parse(r) : null; } catch { return null; } };
+
+// ── API ───────────────────────────────────────────────────────────
+async function apiFetch(path, opts = {}) {
+  const h = { "Content-Type": "application/json" };
+  if (S.adminToken) h["Authorization"] = "Bearer " + S.adminToken;
+  const res = await fetch(API_BASE.replace(/\/$/, "") + path, { ...opts, headers: h });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+  return json;
+}
+
+// ── Google SSO ────────────────────────────────────────────────────
+function initGoogleSignIn() {
+  if (!window.google?.accounts?.id) { setTimeout(initGoogleSignIn, 300); return; }
+  google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select: false });
+  renderGoogleBtn();
+}
+function renderGoogleBtn() {
+  const c = document.getElementById("google-btn-container"); if (!c) return;
+  google.accounts.id.renderButton(c, { type:"standard", theme:"filled_black", size:"large", shape:"pill", text:"signin_with" });
+}
+async function handleGoogleCredential(response) {
+  showLoginLoading(true); clearLoginError();
+  try {
+    const d = await apiFetch("/auth/google", { method:"POST", body:JSON.stringify({ credential: response.credential }) });
+    S.adminToken = d.token; S.adminUser = { email:d.email, name:d.name, picture:d.picture };
+    sessionStorage.setItem(SS_TOKEN, d.token);
+    sessionStorage.setItem(SS_USER, JSON.stringify(S.adminUser));
+    document.getElementById("login-modal").classList.add("hidden");
+    enterAdmin();
+  } catch(e) {
+    showLoginLoading(false); showLoginError(e.message || "Sign-in failed. Please try again.");
+  }
+}
+function showLoginLoading(on) {
+  document.getElementById("login-idle").style.display    = on ? "none"  : "block";
+  document.getElementById("login-loading").style.display = on ? "block" : "none";
+}
+function showLoginError(msg) { const e = document.getElementById("login-error"); e.textContent = msg; e.style.display = "block"; }
+function clearLoginError()   { const e = document.getElementById("login-error"); if (e) e.style.display = "none"; }
+
+async function tryRestoreSession() {
+  if (!S.adminToken) return false;
+  try { await apiFetch("/auth/me"); return true; }
+  catch { S.adminToken = null; S.adminUser = null; sessionStorage.removeItem(SS_TOKEN); sessionStorage.removeItem(SS_USER); return false; }
+}
+
+// ── Data ──────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const r = await apiFetch("/api/seating"); S.data = r.data; localCache(S.data); return "api";
+  } catch { S.data = localCacheLoad() || emptyData(); return "cache"; }
+}
+async function saveData() {
+  setSyncStatus("saving", "Saving…"); localCache(S.data);
+  try {
+    await apiFetch("/api/seating", { method:"PUT", body:JSON.stringify(S.data) });
+    setSyncStatus("saved", "Saved ✦"); showToast("✦ Changes saved");
+    setTimeout(() => setSyncStatus("idle", "—"), 3500);
+  } catch(e) {
+    setSyncStatus("error", "Error"); showToast("Save failed: " + e.message, "error");
+    setTimeout(() => setSyncStatus("idle", "—"), 5000);
+  }
+}
+// Pre-set floor plan positions matching the actual venue (Rajat & Vinita, April 19 2026)
+const VENUE_TABLES = [
+  // Positions scaled 1.5× from floor plan coordinates for readable spacing
+  {id:'t1',  name:'Table 1',  x:1029, y:674, seats:[]},
+  {id:'t2',  name:'Table 2',  x:885,  y:674, seats:[]},
+  {id:'t3',  name:'Table 3',  x:726,  y:558, seats:[]},
+  {id:'t4',  name:'Table 4',  x:726,  y:674, seats:[]},
+  {id:'t5',  name:'Table 5',  x:596,  y:674, seats:[]},
+  {id:'t6',  name:'Table 6',  x:596,  y:558, seats:[]},
+  {id:'t7',  name:'Table 7',  x:467,  y:647, seats:[]},
+  {id:'t8',  name:'Table 8',  x:326,  y:647, seats:[]},
+  {id:'t9',  name:'Table 9',  x:498,  y:506, seats:[]},
+  {id:'t10', name:'Table 10', x:380,  y:506, seats:[]},
+  {id:'t11', name:'Table 11', x:236,  y:506, seats:[]},
+  {id:'t12', name:'Table 12', x:498,  y:371, seats:[]},
+  {id:'t13', name:'Table 13', x:380,  y:371, seats:[]},
+  {id:'t14', name:'Table 14', x:236,  y:371, seats:[]},
+  {id:'t15', name:'Table 15', x:236,  y:236, seats:[]},
+  {id:'t16', name:'Table 16', x:380,  y:236, seats:[]},
+  {id:'t17', name:'Table 17', x:488,  y:236, seats:[]},
+  {id:'t18', name:'Table 18', x:326,  y:90,  seats:[]},
+  {id:'t19', name:'Table 19', x:455,  y:90,  seats:[]},
+  {id:'t20', name:'Table 20', x:630,  y:195, seats:[]},
+  {id:'t21', name:'Table 21', x:630,  y:90,  seats:[]},
+  {id:'t22', name:'Table 22', x:771,  y:195, seats:[]},
+  {id:'t23', name:'Table 23', x:815,  y:90,  seats:[]},
+  {id:'t24', name:'Table 24', x:923,  y:195, seats:[]},
+  {id:'t25', name:'Table 25', x:1017, y:90,  seats:[]},
+];
+
+const emptyData = () => ({
+  config:{ name1:"Rajat", name2:"Vinita", date:"Sunday, April 19th, 2026", venue:"The Grand Ballroom" },
+  tables: VENUE_TABLES.map(t => ({...t, seats:[...t.seats]}))
+});
+
+// ── Seat dots ─────────────────────────────────────────────────────
+function makeSeatDots(count, sz, hl) {
+  const w = document.createElement("div");
+  w.style.cssText = "position:absolute;inset:0;border-radius:50%;pointer-events:none;";
+  const n = Math.min(count, 12), cx = sz/2, cy = sz/2, r = cx - 5;
+  for (let i = 0; i < n; i++) {
+    const a = 2*Math.PI*i/n - Math.PI/2, d = document.createElement("div"); d.className = "seat-dot";
+    d.style.left = (cx + r*Math.cos(a) - 4.5) + "px";
+    d.style.top  = (cy + r*Math.sin(a) - 4.5) + "px";
+    if (hl) { d.style.background="rgba(200,168,107,.65)"; d.style.borderColor="var(--gold)"; }
+    w.appendChild(d);
+  }
+  return w;
+}
+
+// ── Venue background SVG ──────────────────────────────────────────
+// 1.5× scaled floor plan: main hall, OCC Stage 12'×32', buffets,
+// sweets, bar, OAK A/B entrances. No 120-chair section.
+function venueBackground(stageEl) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS,'svg');
+  svg.setAttribute('width','1420');
+  svg.setAttribute('height','760');
+  svg.setAttribute('viewBox','0 0 1420 760');
+  svg.style.cssText='position:absolute;left:0;top:0;pointer-events:none;z-index:0;';
+
+  const e = (tag, attrs) => {
+    const el = document.createElementNS(NS, tag);
+    Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    return el;
+  };
+  const lbl = (text, x, y, opts={}) => {
+    const t = e('text',{x,y,'text-anchor':opts.anchor||'middle',
+      'dominant-baseline':'middle',fill:opts.fill||'rgba(237,232,220,.3)',
+      'font-size':opts.sz||'11','font-family':"'Raleway',sans-serif",
+      'font-weight':opts.w||'400','letter-spacing':opts.ls||'1.5',
+      'text-transform':'uppercase',...(opts.extra||{})});
+    t.textContent=text; return t;
+  };
+
+  // ── Main hall outline ──────────────────────────────────────────
+  svg.appendChild(e('rect',{x:'3',y:'3',width:'1179',height:'729',
+    fill:'none',stroke:'rgba(200,168,107,.2)','stroke-width':'2'}));
+
+  // ── Vertical wall divider: main hall → OCC Stage ──────────────
+  svg.appendChild(e('line',{x1:'1188',y1:'0',x2:'1188',y2:'760',
+    stroke:'rgba(200,168,107,.35)','stroke-width':'2'}));
+
+  // ── OCC Stage 12'×32' (performance stage, right of hall) ──────
+  // Outer section background
+  svg.appendChild(e('rect',{x:'1191',y:'3',width:'224',height:'729',
+    fill:'rgba(8,5,20,.6)',stroke:'rgba(200,168,107,.18)','stroke-width':'1.5'}));
+  // Stage platform (raised area, full height, dark)
+  svg.appendChild(e('rect',{x:'1197',y:'28',width:'212',height:'680',
+    fill:'rgba(12,8,30,.85)',stroke:'rgba(200,168,107,.42)','stroke-width':'2'}));
+  // Stage plank-style horizontal lines (decorative)
+  for (let i=0;i<9;i++)
+    svg.appendChild(e('line',{
+      x1:1198,y1:95+i*66,x2:1408,y2:95+i*66,
+      stroke:'rgba(200,168,107,.06)','stroke-width':'1.5'
+    }));
+  // Steps indicator at front edge (left side of stage)
+  svg.appendChild(e('rect',{x:'1191',y:'310',width:'6',height:'140',
+    fill:'rgba(200,168,107,.25)',rx:'2'}));
+
+  // ── Dance floor (centre of main hall) ──────────────────────────
+  svg.appendChild(e('rect',{x:'624',y:'267',width:'228',height:'246',
+    fill:'rgba(12,8,28,.8)',stroke:'rgba(200,168,107,.42)',
+    'stroke-width':'2'}));
+  // Inner texture lines
+  for (let i=0;i<4;i++)
+    svg.appendChild(e('line',{
+      x1:641,y1:294+i*51,x2:836,y2:294+i*51,
+      stroke:'rgba(200,168,107,.07)','stroke-width':'1.5'
+    }));
+
+  // ── Head table for 2 ───────────────────────────────────────────
+  svg.appendChild(e('rect',{x:'885',y:'501',width:'78',height:'36',
+    fill:'rgba(200,168,107,.12)',stroke:'rgba(200,168,107,.45)',
+    'stroke-width':'1.5',rx:'4'}));
+
+  // ── High top table for cake ─────────────────────────────────────
+  svg.appendChild(e('circle',{cx:'957',cy:'183',r:'21',
+    fill:'rgba(200,168,107,.1)',stroke:'rgba(200,168,107,.4)','stroke-width':'1.5'}));
+
+  // ── Dinner Buffet strips — left wall (two sections) ─────────────
+  svg.appendChild(e('rect',{x:'3',y:'153',width:'19',height:'225',
+    fill:'rgba(200,168,107,.22)',rx:'3'}));
+  svg.appendChild(e('rect',{x:'3',y:'429',width:'19',height:'225',
+    fill:'rgba(200,168,107,.22)',rx:'3'}));
+
+  // ── 8' Sweets tables ───────────────────────────────────────────
+  svg.appendChild(e('rect',{x:'96',y:'10',width:'123',height:'25',
+    fill:'rgba(200,168,107,.13)',stroke:'rgba(200,168,107,.32)',
+    'stroke-width':'1.5',rx:'4'}));
+  svg.appendChild(e('rect',{x:'96',y:'693',width:'123',height:'25',
+    fill:'rgba(200,168,107,.13)',stroke:'rgba(200,168,107,.32)',
+    'stroke-width':'1.5',rx:'4'}));
+
+  // ── BAR A ──────────────────────────────────────────────────────
+  svg.appendChild(e('rect',{x:'225',y:'705',width:'87',height:'25',
+    fill:'rgba(109,184,138,.14)',stroke:'rgba(109,184,138,.42)',
+    'stroke-width':'1.5',rx:'4'}));
+
+  // ── OAK A entrance badge ───────────────────────────────────────
+  svg.appendChild(e('rect',{x:'288',y:'0',width:'132',height:'18',
+    fill:'rgba(200,168,107,.22)',rx:'3'}));
+  // ── OAK B entrance badge ───────────────────────────────────────
+  svg.appendChild(e('rect',{x:'852',y:'0',width:'132',height:'18',
+    fill:'rgba(200,168,107,.22)',rx:'3'}));
+
+  // ── LABELS ─────────────────────────────────────────────────────
+  svg.appendChild(lbl('OAK A',354,9,{sz:'9',fill:'rgba(200,168,107,.8)',ls:'2.5',w:'600'}));
+  svg.appendChild(lbl('OAK B',918,9,{sz:'9',fill:'rgba(200,168,107,.8)',ls:'2.5',w:'600'}));
+
+  // Stage labels (centre area = dance floor)
+  svg.appendChild(lbl("DANCE FLOOR",738,371,{sz:'11',fill:'rgba(237,232,220,.38)',ls:'2.5',w:'500'}));
+
+  // Head table label
+  svg.appendChild(lbl('HEAD TABLE',924,523,{sz:'9',fill:'rgba(200,168,107,.7)',ls:'.5'}));
+
+  // Cake table label
+  svg.appendChild(lbl('CAKE',957,212,{sz:'9',fill:'rgba(200,168,107,.65)',ls:'.5'}));
+
+  // Buffet labels (rotated vertical text)
+  svg.appendChild(lbl('DINNER BUFFET',30,266,{sz:'9',fill:'rgba(200,168,107,.55)',ls:'2',
+    extra:{transform:'rotate(-90,30,266)'}}));
+  svg.appendChild(lbl('DINNER BUFFET',30,542,{sz:'9',fill:'rgba(200,168,107,.55)',ls:'2',
+    extra:{transform:'rotate(-90,30,542)'}}));
+
+  // Sweets labels
+  svg.appendChild(lbl("8' SWEETS",158,22,{sz:'9',fill:'rgba(200,168,107,.7)',ls:'.5'}));
+  svg.appendChild(lbl("8' SWEETS",158,706,{sz:'9',fill:'rgba(200,168,107,.7)',ls:'.5'}));
+
+  // Bar label
+  svg.appendChild(lbl('BAR A',269,718,{sz:'9',fill:'rgba(109,184,138,.9)',ls:'1.5',w:'600'}));
+
+  // ── Stage labels ────────────────────────────────────────────────
+  svg.appendChild(lbl('OCC STAGE',1303,340,{sz:'11',fill:'rgba(237,232,220,.5)',ls:'2.5',w:'600'}));
+  svg.appendChild(lbl("12' × 32'",1303,362,{sz:'10',fill:'rgba(200,168,107,.65)',ls:'2'}));
+  // Vertical "STAGE" text down the steps edge
+  svg.appendChild(lbl('STAGE',1183,370,{sz:'8',fill:'rgba(200,168,107,.45)',ls:'2',
+    extra:{transform:'rotate(-90,1183,370)'}}));
+
+  stageEl.insertBefore(svg, stageEl.firstChild);
+}
+
+// ── Guest map ─────────────────────────────────────────────────────
+function renderGuestMap() {
+  const stage = document.getElementById("guest-map-stage"); stage.innerHTML = "";
+  venueBackground(stage);
+  const isTouchDevice = window.matchMedia("(hover:none)").matches;
+  (S.data?.tables || []).forEach(table => {
+    const isHl = table.id === S.highlightTable;
+    const node = document.createElement("div");
+    node.className = "table-node" + (isHl ? " highlighted" : "");
+    node.style.left = table.x + "px"; node.style.top = table.y + "px";
+    const inner = document.createElement("div"); inner.className = "table-node-inner";
+    inner.appendChild(makeSeatDots(table.seats.length, 110, isHl));
+    const circle = document.createElement("div");
+    circle.className = "table-circle" + (isHl ? " highlighted" : "");
+    circle.style.cssText = "position:absolute;left:18px;top:18px;";
+    const cnt = document.createElement("div"); cnt.className = "table-count";
+    cnt.innerHTML = `<span style="font-size:13px;font-family:var(--ff);color:${isHl?'var(--gold2)':'var(--cream)'};">${table.seats.length}</span><br>guests`;
+    circle.appendChild(cnt); inner.appendChild(circle); node.appendChild(inner);
+    const label = document.createElement("div"); label.className = "table-label";
+    label.textContent = table.name; node.appendChild(label);
+
+    if (isTouchDevice) {
+      // Touch: tap to open bottom drawer
+      node.addEventListener("click", () => openDrawer(table));
+    } else {
+      // Desktop: hover tooltip
+      let tip = null;
+      node.addEventListener("mouseenter", () => {
+        tip = document.createElement("div"); tip.className = "table-tooltip";
+        const h = document.createElement("h4"); h.textContent = table.name; tip.appendChild(h);
+        table.seats.forEach(s => {
+          const g = document.createElement("div");
+          const m = (S.searchResults||[]).some(r => r.guestId===s.id||r.id===s.id);
+          g.className = "tooltip-guest"+(m?" match":""); g.textContent = s.name; tip.appendChild(g);
+        });
+        node.appendChild(tip);
+      });
+      node.addEventListener("mouseleave", () => { if(tip){tip.remove();tip=null;} });
+    }
+    stage.appendChild(node);
+  });
+}
+
+// ── Table Drawer (mobile) ─────────────────────────────────────────
+function openDrawer(table) {
+  S.highlightTable = table.id; renderGuestMap();
+  const drawer = document.getElementById("table-drawer");
+  const backdrop = document.getElementById("drawer-backdrop");
+  document.getElementById("drawer-title").textContent = table.name;
+  const glist = document.getElementById("drawer-guests"); glist.innerHTML = "";
+  table.seats.forEach(s => {
+    const g = document.createElement("div");
+    const m = (S.searchResults||[]).some(r => r.guestId===s.id||r.id===s.id);
+    g.className = "drawer-guest"+(m?" match":""); g.textContent = s.name; glist.appendChild(g);
+  });
+  drawer.classList.add("open"); backdrop.classList.add("active");
+}
+function closeDrawer() {
+  document.getElementById("table-drawer").classList.remove("open");
+  document.getElementById("drawer-backdrop").classList.remove("active");
+}
+
+// ── Admin map ─────────────────────────────────────────────────────
+function renderAdminMap() {
+  const stage = document.getElementById("admin-stage"); stage.innerHTML = "";
+  venueBackground(stage);
+  (S.data?.tables || []).forEach(table => {
+    const isSel = table.id === S.selectedTableId;
+    const node = document.createElement("div");
+    node.className = "admin-table-node" + (isSel ? " selected" : "");
+    node.style.left = table.x + "px"; node.style.top = table.y + "px";
+    node.dataset.id = table.id;
+    const inner = document.createElement("div"); inner.className = "table-node-inner";
+    inner.appendChild(makeSeatDots(table.seats.length, 110, false));
+    const circle = document.createElement("div"); circle.className = "table-circle";
+    circle.style.cssText = "position:absolute;left:18px;top:18px;";
+    const cnt = document.createElement("div"); cnt.className = "table-count";
+    cnt.innerHTML = `<span style="font-size:13px;font-family:var(--ff);color:var(--cream);">${table.seats.length}</span><br>guests`;
+    circle.appendChild(cnt); inner.appendChild(circle); node.appendChild(inner);
+    const label = document.createElement("div"); label.className = "table-label";
+    label.textContent = table.name; node.appendChild(label);
+
+    // Mouse drag
+    node.addEventListener("mousedown", e => {
+      e.preventDefault();
+      const t = S.data.tables.find(t=>t.id===table.id);
+      S.dragging=table.id; S.dragSX=e.clientX; S.dragSY=e.clientY; S.origX=t.x; S.origY=t.y;
+      selectTable(table.id);
+    });
+    // Touch drag
+    node.addEventListener("touchstart", e => {
+      const tc = e.touches[0], t = S.data.tables.find(t=>t.id===table.id);
+      S.dragging=table.id; S.dragSX=tc.clientX; S.dragSY=tc.clientY; S.origX=t.x; S.origY=t.y;
+      selectTable(table.id);
+    }, {passive:true});
+    stage.appendChild(node);
+  });
+}
+
+// ── Guest view ────────────────────────────────────────────────────
+function updateGuestView() {
+  const c = S.data?.config || {};
+  document.getElementById("guest-name1").textContent  = c.name1  || "—";
+  document.getElementById("guest-name2").textContent  = c.name2  || "—";
+  document.getElementById("guest-date").textContent   = c.date   || "";
+  document.getElementById("guest-venue").textContent  = c.venue  || "";
+  document.title = c.name1 && c.name2 ? `${c.name1} & ${c.name2} — Reception` : "Wedding Reception";
+  renderGuestMap();
+}
+
+// ── Search ────────────────────────────────────────────────────────
+let searchTimer;
+function doSearch(q) {
+  S.query = q; clearTimeout(searchTimer);
+  const el = document.getElementById("search-results");
+  if (!q.trim()) { el.style.display="none"; S.highlightTable=null; S.searchResults=null; renderGuestMap(); return; }
+  searchTimer = setTimeout(async () => {
+    let found = [];
+    try { const r = await apiFetch(`/api/seating/search?q=${encodeURIComponent(q)}`); found = r.results||[]; }
+    catch { const lower=q.toLowerCase(); (S.data?.tables||[]).forEach(t=>t.seats.forEach(s=>{if(s.name.toLowerCase().includes(lower))found.push({guestId:s.id,guestName:s.name,tableId:t.id,tableName:t.name});})); }
+    S.searchResults = found; S.highlightTable = found.length ? found[0].tableId : null;
+    renderGuestMap(); el.style.display="block"; el.innerHTML="";
+    if (!found.length) { el.innerHTML=`<div class="no-results">No guest found for "<em>${q}</em>"</div>`; return; }
+    found.forEach(r => {
+      const card = document.createElement("div"); card.className="result-card"; card.setAttribute("role","listitem");
+      card.innerHTML=`<div class="result-icon">🌸</div><div><div class="result-name">${r.guestName||r.name}</div><div class="result-table">✦ &nbsp; ${r.tableName}</div></div>`;
+      card.addEventListener("click", () => {
+        S.highlightTable=r.tableId; renderGuestMap();
+        document.querySelector(".map-outer").scrollIntoView({behavior:"smooth", block:"center"});
+      });
+      el.appendChild(card);
+    });
+  }, 300);
+}
+
+// ── Admin enter / exit ────────────────────────────────────────────
+function enterAdmin() {
+  const u = S.adminUser;
+  if (u) {
+    document.getElementById("admin-user-name").textContent  = u.name  || "Admin";
+    document.getElementById("admin-user-email").textContent = u.email || "";
+    const wrap = document.getElementById("admin-avatar-wrap");
+    if (u.picture) wrap.innerHTML = `<img class="admin-avatar" src="${u.picture}" alt="${u.name}" referrerpolicy="no-referrer">`;
+  }
+  document.getElementById("guest-view").classList.remove("active");
+  document.getElementById("admin-view").classList.add("active");
+  syncDetailsFields(); renderTableList(); renderAdminMap();
+}
+function signOut() {
+  if (window.google?.accounts?.id) google.accounts.id.disableAutoSelect();
+  S.adminToken=null; S.adminUser=null;
+  sessionStorage.removeItem(SS_TOKEN); sessionStorage.removeItem(SS_USER);
+  document.getElementById("admin-view").classList.remove("active");
+  document.getElementById("guest-view").classList.add("active");
+  updateGuestView(); showToast("Signed out");
+}
+
+// ── Admin sidebar ─────────────────────────────────────────────────
+function switchAdminTab(tab) {
+  ["tables","details"].forEach(t => {
+    document.getElementById("tab-"+t).style.display = t===tab ? "block" : "none";
+    const btn = document.querySelector(`.sidebar-tab[data-tab="${t}"]`);
+    btn.classList.toggle("active", t===tab);
+    btn.setAttribute("aria-selected", t===tab);
+  });
+}
+function renderTableList() {
+  const list = document.getElementById("table-list"); list.innerHTML="";
+  (S.data?.tables||[]).forEach(t => {
+    const item=document.createElement("div");
+    item.className="table-list-item"+(S.selectedTableId===t.id?" selected":"");
+    item.innerHTML=`<span class="table-list-name">${t.name}</span><span class="table-list-count">${t.seats.length} guests</span>`;
+    item.addEventListener("click",()=>selectTable(t.id)); list.appendChild(item);
+  });
+}
+function selectTable(id) { S.selectedTableId=id; renderTableList(); renderAdminMap(); renderSelectedTable(); }
+function renderSelectedTable() {
+  const sec=document.getElementById("selected-table-section");
+  const t=(S.data?.tables||[]).find(t=>t.id===S.selectedTableId);
+  if (!t){sec.style.display="none";return;}
+  sec.style.display="block";
+  document.getElementById("selected-table-heading").textContent=`Edit: ${t.name}`;
+  document.getElementById("edit-table-name").value=t.name;
+  document.getElementById("guest-count").textContent=t.seats.length;
+  const glist=document.getElementById("guest-list"); glist.innerHTML="";
+  if (!t.seats.length){glist.innerHTML='<p class="no-guests">No guests yet — add some below.</p>';return;}
+  t.seats.forEach(s=>{
+    const row=document.createElement("div"); row.className="guest-row";
+    const nm=document.createElement("span"); nm.className="guest-row-name"; nm.textContent=s.name;
+    const rm=document.createElement("button"); rm.className="remove-btn"; rm.textContent="×"; rm.setAttribute("aria-label",`Remove ${s.name}`);
+    rm.addEventListener("click",()=>{
+      const tbl=S.data.tables.find(t=>t.id===S.selectedTableId);
+      tbl.seats=tbl.seats.filter(seat=>seat.id!==s.id);
+      renderTableList(); renderSelectedTable(); renderAdminMap();
+    });
+    row.append(nm,rm); glist.appendChild(row);
+  });
+}
+function syncDetailsFields() {
+  const c=S.data?.config||{};
+  ["name1","name2","date","venue"].forEach(f=>{document.getElementById("cfg-"+f).value=c[f]||"";});
+}
+function exportData() {
+  const b=new Blob([JSON.stringify(S.data,null,2)],{type:"application/json"});
+  const u=URL.createObjectURL(b),a=document.createElement("a");
+  a.href=u;a.download="wedding-seating.json";a.click();URL.revokeObjectURL(u);
+  showToast("✦ Exported");
+}
+function importData(file) {
+  const r=new FileReader();
+  r.onload=e=>{
+    try{const d=JSON.parse(e.target.result);if(!d.config||!Array.isArray(d.tables))throw 0;
+    S.data=d;syncDetailsFields();renderTableList();renderSelectedTable();renderAdminMap();updateGuestView();showToast("✦ Imported");}
+    catch{showToast("Import failed — invalid file","error");}
+  };r.readAsText(file);
+}
+function autoLayout() {
+  const t=S.data?.tables||[],cols=Math.max(1,Math.ceil(Math.sqrt(t.length)));
+  t.forEach((tbl,i)=>{tbl.x=130+(i%cols)*170;tbl.y=80+Math.floor(i/cols)*170;});
+  renderAdminMap();showToast("✦ Auto layout applied");
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════════════
+document.addEventListener("DOMContentLoaded", async () => {
+  initGoogleSignIn();
+
+  const loadResult = await loadData();
+  updateGuestView();
+  document.getElementById("loading-screen").classList.add("hidden");
+  if (loadResult === "cache") showToast("Loaded from cache — API may be waking up", "error");
+
+  // Restore admin session
+  if (S.adminToken && await tryRestoreSession()) enterAdmin();
+
+  // ── Guest ──────────────────────────────────────────────────────
+  document.getElementById("search-input").addEventListener("input", e => doSearch(e.target.value));
+
+  document.getElementById("open-admin-btn").addEventListener("click", () => {
+    showLoginLoading(false); clearLoginError();
+    document.getElementById("login-modal").classList.remove("hidden");
+    setTimeout(renderGoogleBtn, 100);
+  });
+  document.getElementById("cancel-login-btn").addEventListener("click", () => {
+    document.getElementById("login-modal").classList.add("hidden");
+  });
+  document.getElementById("login-modal").addEventListener("click", e => {
+    if (e.target===e.currentTarget) e.currentTarget.classList.add("hidden");
+  });
+
+  // Drawer backdrop
+  document.getElementById("drawer-backdrop").addEventListener("click", closeDrawer);
+  const drawer = document.getElementById("table-drawer");
+  // Swipe down to close drawer
+  let dwTouchStart = 0;
+  drawer.addEventListener("touchstart", e => { dwTouchStart = e.touches[0].clientY; }, {passive:true});
+  drawer.addEventListener("touchend", e => {
+    if (e.changedTouches[0].clientY - dwTouchStart > 60) closeDrawer();
+  }, {passive:true});
+
+  // ── Admin ──────────────────────────────────────────────────────
+  document.getElementById("signout-btn").addEventListener("click", signOut);
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    document.getElementById("admin-view").classList.remove("active");
+    document.getElementById("guest-view").classList.add("active");
+    updateGuestView();
+  });
+  document.getElementById("save-btn").addEventListener("click", saveData);
+  document.querySelectorAll(".sidebar-tab").forEach(b => b.addEventListener("click", () => switchAdminTab(b.dataset.tab)));
+
+  document.getElementById("add-table-btn").addEventListener("click", () => {
+    const inp=document.getElementById("new-table-input");
+    const name=inp.value.trim(); if(!name){inp.focus();return;}
+    if(!S.data.tables)S.data.tables=[];
+    const id=uid(); S.data.tables.push({id,name,x:200,y:200,seats:[]});
+    inp.value=""; renderTableList(); renderAdminMap(); selectTable(id);
+  });
+  document.getElementById("new-table-input").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("add-table-btn").click();});
+  document.getElementById("edit-table-name").addEventListener("input",e=>{
+    const t=(S.data.tables||[]).find(t=>t.id===S.selectedTableId); if(!t)return;
+    t.name=e.target.value; renderTableList(); renderAdminMap();
+    document.getElementById("selected-table-heading").textContent=`Edit: ${t.name}`;
+  });
+  document.getElementById("add-guest-btn").addEventListener("click",()=>{
+    const t=(S.data.tables||[]).find(t=>t.id===S.selectedTableId); if(!t)return;
+    const inp=document.getElementById("new-guest-input");
+    const name=inp.value.trim(); if(!name){inp.focus();return;}
+    t.seats.push({id:uid(),name}); inp.value=""; renderSelectedTable(); renderAdminMap();
+  });
+  document.getElementById("new-guest-input").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("add-guest-btn").click();});
+  document.getElementById("delete-table-btn").addEventListener("click",()=>{
+    const t=(S.data.tables||[]).find(t=>t.id===S.selectedTableId); if(!t)return;
+    if(!confirm(`Delete "${t.name}"?`))return;
+    S.data.tables=S.data.tables.filter(tbl=>tbl.id!==S.selectedTableId);
+    S.selectedTableId=null; renderTableList(); renderSelectedTable(); renderAdminMap();
+    showToast("Table deleted");
+  });
+  ["name1","name2","date","venue"].forEach(f=>{
+    document.getElementById("cfg-"+f).addEventListener("input",e=>{
+      if(!S.data.config)S.data.config={};
+      S.data.config[f]=e.target.value; updateGuestView();
+    });
+  });
+  document.getElementById("export-btn").addEventListener("click",exportData);
+  document.getElementById("import-btn").addEventListener("click",()=>document.getElementById("import-file").click());
+  document.getElementById("import-file").addEventListener("change",e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value="";});
+  document.getElementById("auto-layout-btn").addEventListener("click",autoLayout);
+  document.getElementById("reset-layout-btn").addEventListener("click", () => {
+    if (!confirm("Reset all table positions to the original floor plan?\nGuest assignments are kept.")) return;
+    VENUE_TABLES.forEach(vt => {
+      const t = (S.data.tables||[]).find(t=>t.id===vt.id);
+      if (t) { t.x=vt.x; t.y=vt.y; }
+    });
+    renderAdminMap(); showToast("✦ Layout reset to floor plan");
+  });
+
+  // ── Drag — mouse ──────────────────────────────────────────────
+  document.addEventListener("mousemove",e=>{
+    if(!S.dragging)return;
+    const t=(S.data.tables||[]).find(t=>t.id===S.dragging); if(!t)return;
+    t.x=Math.max(60,S.origX+(e.clientX-S.dragSX)); t.y=Math.max(60,S.origY+(e.clientY-S.dragSY));
+    const n=document.querySelector(`.admin-table-node[data-id="${t.id}"]`);
+    if(n){n.style.left=t.x+"px";n.style.top=t.y+"px";}
+  });
+  document.addEventListener("mouseup",()=>{S.dragging=null;});
+
+  // ── Drag — touch ──────────────────────────────────────────────
+  document.addEventListener("touchmove",e=>{
+    if(!S.dragging)return;
+    const tc=e.touches[0],t=(S.data.tables||[]).find(t=>t.id===S.dragging); if(!t)return;
+    t.x=Math.max(60,S.origX+(tc.clientX-S.dragSX)); t.y=Math.max(60,S.origY+(tc.clientY-S.dragSY));
+    const n=document.querySelector(`.admin-table-node[data-id="${t.id}"]`);
+    if(n){n.style.left=t.x+"px";n.style.top=t.y+"px";}
+  },{passive:true});
+  document.addEventListener("touchend",()=>{S.dragging=null;});
+});
+</script>
+</body>
+</html>
