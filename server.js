@@ -31,7 +31,7 @@ const {
   if (!v) throw new Error(`${k} env var is required`);
 });
 
-const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().split(',').trim();
+const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim().split(',');
 const SESSION_TTL = '8h';
 const DOC_ID = 'main_seating';
 
