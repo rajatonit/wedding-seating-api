@@ -31,7 +31,19 @@ const {
   if (!v) throw new Error(`${k} env var is required`);
 });
 
-const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim().split(',');
+function parseAdminEmails(raw) {
+  return String(raw || '')
+    .split(',')
+    .map((s) =>
+      s
+        .trim()
+        .replace(/^['"]|['"]$/g, '')
+        .toLowerCase(),
+    )
+    .filter(Boolean);
+}
+
+const ADMIN_EMAIL_LOWER = parseAdminEmails(ADMIN_EMAIL);
 const SESSION_TTL = '8h';
 const DOC_ID = 'main_seating';
 
@@ -411,7 +423,7 @@ app.use((err, _req, res, _next) => {
 
 app.listen(PORT, () => {
   console.log(`✦ Wedding API  port=${PORT}  admin=${ADMIN_EMAIL}`);
-  console.log(`Admin emails: ${ADMIN_EMAIL_LOWER}`);
+  console.log(`Admin emails: ${JSON.stringify(ADMIN_EMAIL_LOWER)}`);
 });
 
 function uid() {
