@@ -15,7 +15,7 @@ const {
   PORT = 3000,
   MONGO_URI,
   DB_NAME = 'wedding',
-  COLLECTION = 'seating',
+  COLLECTION = 'seating-v1',
   JWT_SECRET, // sign session JWTs — generate: openssl rand -hex 32
   GOOGLE_CLIENT_ID, // from Google Cloud Console (OAuth 2.0 Web Client)
   ADMIN_EMAIL, // Google account email allowed to administer the site
@@ -31,7 +31,7 @@ const {
   if (!v) throw new Error(`${k} env var is required`);
 });
 
-const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim().split(',');
+const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim();
 const SESSION_TTL = '8h';
 const DOC_ID = 'main_seating';
 
@@ -64,111 +64,37 @@ function seedDoc() {
   return {
     docId: DOC_ID,
     config: {
-      name1: 'Your Name',
-      name2: "Partner's Name",
-      date: 'Your Wedding Date',
-      venue: 'Your Venue',
-      tagline: 'Please find your seat for the evening',
+      name1: 'Rajat',
+      name2: 'Vinita',
+      date: 'Sunday, April 19th, 2026',
+      venue: 'The Grand Ballroom',
     },
     tables: [
-      {
-        id: 'head',
-        name: 'Head Table',
-        x: 350,
-        y: 70,
-        seats: [
-          { id: 'h1', name: 'Bride' },
-          { id: 'h2', name: 'Groom' },
-          { id: 'h3', name: 'Maid of Honor' },
-          { id: 'h4', name: 'Best Man' },
-          { id: 'h5', name: 'Bridesmaid' },
-          { id: 'h6', name: 'Groomsman' },
-        ],
-      },
-      {
-        id: 't1',
-        name: 'Table 1',
-        x: 130,
-        y: 240,
-        seats: [
-          { id: 'a1', name: 'Alice Johnson' },
-          { id: 'a2', name: 'Robert Johnson' },
-          { id: 'a3', name: 'Lucy Chen' },
-          { id: 'a4', name: 'Mark Chen' },
-          { id: 'a5', name: 'Diana Evans' },
-          { id: 'a6', name: 'Oliver Grant' },
-        ],
-      },
-      {
-        id: 't2',
-        name: 'Table 2',
-        x: 350,
-        y: 240,
-        seats: [
-          { id: 'b1', name: 'Sophie Smith' },
-          { id: 'b2', name: 'Henry Brown' },
-          { id: 'b3', name: 'Grace Lee' },
-          { id: 'b4', name: 'Aiden White' },
-          { id: 'b5', name: 'Chloe Martin' },
-          { id: 'b6', name: 'Ethan Davis' },
-        ],
-      },
-      {
-        id: 't3',
-        name: 'Table 3',
-        x: 570,
-        y: 240,
-        seats: [
-          { id: 'c1', name: 'Mia Taylor' },
-          { id: 'c2', name: 'Noah Wilson' },
-          { id: 'c3', name: 'Emma Wilson' },
-          { id: 'c4', name: 'Liam Moore' },
-          { id: 'c5', name: 'Isabella Peters' },
-          { id: 'c6', name: 'James Anderson' },
-        ],
-      },
-      {
-        id: 't4',
-        name: 'Table 4',
-        x: 130,
-        y: 430,
-        seats: [
-          { id: 'd1', name: 'Charlotte Walsh' },
-          { id: 'd2', name: 'William Thomas' },
-          { id: 'd3', name: 'Amelia Jackson' },
-          { id: 'd4', name: 'Benjamin Harris' },
-          { id: 'd5', name: 'Evelyn Martin' },
-          { id: 'd6', name: 'Samuel White' },
-        ],
-      },
-      {
-        id: 't5',
-        name: 'Table 5',
-        x: 350,
-        y: 430,
-        seats: [
-          { id: 'e1', name: 'Lucas Garcia' },
-          { id: 'e2', name: 'Harper Thompson' },
-          { id: 'e3', name: 'Elijah Robinson' },
-          { id: 'e4', name: 'Abigail Clark' },
-          { id: 'e5', name: 'Mason Lewis' },
-          { id: 'e6', name: 'Layla Scott' },
-        ],
-      },
-      {
-        id: 't6',
-        name: 'Table 6',
-        x: 570,
-        y: 430,
-        seats: [
-          { id: 'f1', name: 'Ava Walker' },
-          { id: 'f2', name: 'Ethan Hall' },
-          { id: 'f3', name: 'Sophia Young' },
-          { id: 'f4', name: 'Jackson King' },
-          { id: 'f5', name: 'Aria Scott' },
-          { id: 'f6', name: 'Ryan Lopez' },
-        ],
-      },
+      { id: 't1', name: 'Table 1', x: 1029, y: 674, seats: [] },
+      { id: 't2', name: 'Table 2', x: 885, y: 674, seats: [] },
+      { id: 't3', name: 'Table 3', x: 726, y: 558, seats: [] },
+      { id: 't4', name: 'Table 4', x: 726, y: 674, seats: [] },
+      { id: 't5', name: 'Table 5', x: 596, y: 674, seats: [] },
+      { id: 't6', name: 'Table 6', x: 596, y: 558, seats: [] },
+      { id: 't7', name: 'Table 7', x: 467, y: 647, seats: [] },
+      { id: 't8', name: 'Table 8', x: 326, y: 647, seats: [] },
+      { id: 't9', name: 'Table 9', x: 498, y: 506, seats: [] },
+      { id: 't10', name: 'Table 10', x: 380, y: 506, seats: [] },
+      { id: 't11', name: 'Table 11', x: 236, y: 506, seats: [] },
+      { id: 't12', name: 'Table 12', x: 498, y: 371, seats: [] },
+      { id: 't13', name: 'Table 13', x: 380, y: 371, seats: [] },
+      { id: 't14', name: 'Table 14', x: 236, y: 371, seats: [] },
+      { id: 't15', name: 'Table 15', x: 236, y: 236, seats: [] },
+      { id: 't16', name: 'Table 16', x: 380, y: 236, seats: [] },
+      { id: 't17', name: 'Table 17', x: 488, y: 236, seats: [] },
+      { id: 't18', name: 'Table 18', x: 326, y: 90, seats: [] },
+      { id: 't19', name: 'Table 19', x: 455, y: 90, seats: [] },
+      { id: 't20', name: 'Table 20', x: 630, y: 195, seats: [] },
+      { id: 't21', name: 'Table 21', x: 630, y: 90, seats: [] },
+      { id: 't22', name: 'Table 22', x: 771, y: 195, seats: [] },
+      { id: 't23', name: 'Table 23', x: 815, y: 90, seats: [] },
+      { id: 't24', name: 'Table 24', x: 923, y: 195, seats: [] },
+      { id: 't25', name: 'Table 25', x: 1017, y: 90, seats: [] },
     ],
     updatedAt: new Date(),
   };
@@ -184,7 +110,7 @@ app.use(
       : true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+  }),
 );
 app.use(express.json({ limit: '1mb' }));
 
@@ -202,9 +128,11 @@ function requireAdmin(req, res, next) {
     req.admin = p;
     next();
   } catch {
-    res.status(401).json({
-      error: 'Session token invalid or expired — please sign in again',
-    });
+    res
+      .status(401)
+      .json({
+        error: 'Session token invalid or expired — please sign in again',
+      });
   }
 }
 
@@ -217,9 +145,7 @@ function verifyGoogleIdToken(idToken) {
   return new Promise((resolve, reject) => {
     https
       .get(
-        `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(
-          idToken
-        )}`,
+        `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`,
         (res) => {
           let raw = '';
           res.on('data', (c) => (raw += c));
@@ -230,14 +156,14 @@ function verifyGoogleIdToken(idToken) {
                 return reject(new Error(json.error_description || json.error));
               if (json.aud !== GOOGLE_CLIENT_ID)
                 return reject(
-                  new Error('Token audience does not match GOOGLE_CLIENT_ID')
+                  new Error('Token audience does not match GOOGLE_CLIENT_ID'),
                 );
               resolve(json);
             } catch (e) {
               reject(e);
             }
           });
-        }
+        },
       )
       .on('error', reject);
   });
@@ -269,7 +195,7 @@ app.post(
 
     const email = (gPayload.email || '').toLowerCase().trim();
 
-    if (!ADMIN_EMAIL_LOWER.includes(email)) {
+    if (email !== ADMIN_EMAIL_LOWER) {
       return res.status(403).json({
         error: `${gPayload.email} is not authorised as admin for this wedding.`,
       });
@@ -278,7 +204,7 @@ app.post(
     const sessionToken = jwt.sign(
       { email, name: gPayload.name, picture: gPayload.picture, role: 'admin' },
       JWT_SECRET,
-      { expiresIn: SESSION_TTL }
+      { expiresIn: SESSION_TTL },
     );
 
     res.json({
@@ -288,7 +214,7 @@ app.post(
       name: gPayload.name,
       picture: gPayload.picture,
     });
-  })
+  }),
 );
 
 // GET /auth/me  — validate a stored session token
@@ -321,7 +247,7 @@ app.get(
     }
     const { _id, docId, ...data } = doc;
     res.json({ ok: true, data });
-  })
+  }),
 );
 
 // PUT /api/seating  — admin full replace
@@ -339,7 +265,7 @@ app.put(
     delete doc._id;
     await col.replaceOne({ docId: DOC_ID }, doc, { upsert: true });
     res.json({ ok: true, updatedAt: doc.updatedAt });
-  })
+  }),
 );
 
 // PATCH /api/seating/config  — admin partial config
@@ -354,7 +280,7 @@ app.patch(
     });
     await col.updateOne({ docId: DOC_ID }, { $set: sets }, { upsert: true });
     res.json({ ok: true });
-  })
+  }),
 );
 
 // POST /api/seating/tables  — admin add table
@@ -369,10 +295,10 @@ app.post(
     await col.updateOne(
       { docId: DOC_ID },
       { $push: { tables: table }, $set: { updatedAt: new Date() } },
-      { upsert: true }
+      { upsert: true },
     );
     res.status(201).json({ ok: true, table });
-  })
+  }),
 );
 
 // PUT /api/seating/tables/:id  — admin update table
@@ -390,12 +316,12 @@ app.put(
     const r = await col.updateOne(
       { docId: DOC_ID },
       { $set: sets },
-      { arrayFilters: [{ 't.id': id }] }
+      { arrayFilters: [{ 't.id': id }] },
     );
     if (!r.matchedCount)
       return res.status(404).json({ error: 'Table not found' });
     res.json({ ok: true });
-  })
+  }),
 );
 
 // DELETE /api/seating/tables/:id  — admin delete table
@@ -409,10 +335,10 @@ app.delete(
       {
         $pull: { tables: { id: req.params.id } },
         $set: { updatedAt: new Date() },
-      }
+      },
     );
     res.json({ ok: true });
-  })
+  }),
 );
 
 // POST /api/seating/tables/:id/guests  — admin add guest
@@ -426,12 +352,12 @@ app.post(
     const col = await getCol();
     const r = await col.updateOne(
       { docId: DOC_ID, 'tables.id': req.params.id },
-      { $push: { 'tables.$.seats': guest }, $set: { updatedAt: new Date() } }
+      { $push: { 'tables.$.seats': guest }, $set: { updatedAt: new Date() } },
     );
     if (!r.matchedCount)
       return res.status(404).json({ error: 'Table not found' });
     res.status(201).json({ ok: true, guest });
-  })
+  }),
 );
 
 // DELETE /api/seating/tables/:tableId/guests/:guestId  — admin remove guest
@@ -446,10 +372,10 @@ app.delete(
       {
         $pull: { 'tables.$.seats': { id: guestId } },
         $set: { updatedAt: new Date() },
-      }
+      },
     );
     res.json({ ok: true });
-  })
+  }),
 );
 
 // GET /api/seating/search?q=  — public guest name search
@@ -471,10 +397,10 @@ app.get(
             tableId: t.id,
             tableName: t.name,
           });
-      })
+      }),
     );
     res.json({ ok: true, results });
-  })
+  }),
 );
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
