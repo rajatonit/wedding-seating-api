@@ -1,4 +1,4 @@
-# 💍 Wedding Seating API (v2 — Google SSO)
+# 💍 Wedding Seating API  (v2 — Google SSO)
 
 REST API + frontend for a wedding reception seating chart.
 **MongoDB Atlas M0** (free) · **Render.com** (free) · **Google Sign-In** (free)
@@ -25,7 +25,7 @@ REST API + frontend for a wedding reception seating chart.
 5. **Connect → Drivers → Node.js** → copy the connection string, fill in `<password>`
 
 ```
-mongodb+srv://@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+mongodb+srv://wedding-api:YOUR_PASSWORD@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
 ```
 
 ---
@@ -66,24 +66,24 @@ git push -u origin main
 2. Connect your GitHub repo
 3. Settings:
 
-   | Field         | Value         |
-   | ------------- | ------------- |
-   | Runtime       | Node          |
+   | Field | Value |
+   |-------|-------|
+   | Runtime | Node |
    | Build Command | `npm install` |
-   | Start Command | `npm start`   |
-   | Instance Type | **Free**      |
+   | Start Command | `npm start` |
+   | Instance Type | **Free** |
 
 4. **Environment Variables:**
 
-   | Key                | Value                                                   |
-   | ------------------ | ------------------------------------------------------- |
-   | `MONGO_URI`        | Your Atlas connection string                            |
-   | `JWT_SECRET`       | Run `openssl rand -hex 32` and paste the output         |
-   | `GOOGLE_CLIENT_ID` | Your OAuth Client ID from Step 2                        |
-   | `ADMIN_EMAIL`      | Your Google account email (the admin)                   |
-   | `DB_NAME`          | `wedding`                                               |
-   | `COLLECTION`       | `seating`                                               |
-   | `ALLOWED_ORIGINS`  | Your frontend URL e.g. `https://my-wedding.netlify.app` |
+   | Key | Value |
+   |-----|-------|
+   | `MONGO_URI` | Your Atlas connection string |
+   | `JWT_SECRET` | Run `openssl rand -hex 32` and paste the output |
+   | `GOOGLE_CLIENT_ID` | Your OAuth Client ID from Step 2 |
+   | `ADMIN_EMAIL` | Your Google account email (the admin) |
+   | `DB_NAME` | `wedding` |
+   | `COLLECTION` | `seating` |
+   | `ALLOWED_ORIGINS` | Your frontend URL e.g. `https://my-wedding.netlify.app` |
 
 5. Deploy → note your service URL: `https://wedding-seating-api-xxxx.onrender.com`
 
@@ -94,12 +94,11 @@ git push -u origin main
 Open `wedding-seating.html` and update the two constants at the top of the `<script>`:
 
 ```javascript
-const API_BASE = 'https://wedding-seating-api-xxxx.onrender.com'; // ← your Render URL
-const GOOGLE_CLIENT_ID = '123456789-abc.apps.googleusercontent.com'; // ← from Step 2
+const API_BASE         = "https://wedding-seating-api-xxxx.onrender.com"; // ← your Render URL
+const GOOGLE_CLIENT_ID = "123456789-abc.apps.googleusercontent.com";       // ← from Step 2
 ```
 
 Then host the HTML file anywhere static:
-
 - [Netlify Drop](https://app.netlify.com/drop) — just drag the file, instant URL
 - GitHub Pages
 - Vercel
@@ -111,8 +110,7 @@ Make sure the frontend URL is in your Google OAuth **Authorised JavaScript origi
 ### Step 6 — Keep Render warm (optional)
 
 Render free tier sleeps after 15 min idle. Use [UptimeRobot](https://uptimerobot.com) (free):
-
-- Monitor type: **HTTP(s)**
+- Monitor type: **HTTP(s)**  
 - URL: `https://your-api.onrender.com/health`
 - Interval: **14 minutes**
 
@@ -120,20 +118,20 @@ Render free tier sleeps after 15 min idle. Use [UptimeRobot](https://uptimerobot
 
 ## API Reference
 
-| Method   | Path                                  | Auth | Description                            |
-| -------- | ------------------------------------- | ---- | -------------------------------------- |
-| `GET`    | `/health`                             | None | Liveness check                         |
-| `POST`   | `/auth/google`                        | None | Exchange Google ID token → JWT session |
-| `GET`    | `/auth/me`                            | JWT  | Validate session                       |
-| `GET`    | `/api/seating`                        | None | Full seating data (public)             |
-| `PUT`    | `/api/seating`                        | JWT  | Replace entire document                |
-| `PATCH`  | `/api/seating/config`                 | JWT  | Update config fields                   |
-| `POST`   | `/api/seating/tables`                 | JWT  | Add table                              |
-| `PUT`    | `/api/seating/tables/:id`             | JWT  | Update table                           |
-| `DELETE` | `/api/seating/tables/:id`             | JWT  | Delete table                           |
-| `POST`   | `/api/seating/tables/:id/guests`      | JWT  | Add guest                              |
-| `DELETE` | `/api/seating/tables/:id/guests/:gid` | JWT  | Remove guest                           |
-| `GET`    | `/api/seating/search?q=`              | None | Search guests by name                  |
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `GET` | `/health` | None | Liveness check |
+| `POST` | `/auth/google` | None | Exchange Google ID token → JWT session |
+| `GET` | `/auth/me` | JWT | Validate session |
+| `GET` | `/api/seating` | None | Full seating data (public) |
+| `PUT` | `/api/seating` | JWT | Replace entire document |
+| `PATCH` | `/api/seating/config` | JWT | Update config fields |
+| `POST` | `/api/seating/tables` | JWT | Add table |
+| `PUT` | `/api/seating/tables/:id` | JWT | Update table |
+| `DELETE` | `/api/seating/tables/:id` | JWT | Delete table |
+| `POST` | `/api/seating/tables/:id/guests` | JWT | Add guest |
+| `DELETE` | `/api/seating/tables/:id/guests/:gid` | JWT | Remove guest |
+| `GET` | `/api/seating/search?q=` | None | Search guests by name |
 
 **Auth header:** `Authorization: Bearer <jwt_token>`
 

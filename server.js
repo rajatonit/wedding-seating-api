@@ -14,7 +14,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const {
   PORT = 3000,
   MONGO_URI,
-  DB_NAME = 'wedding-seating',
+  DB_NAME = 'wedding',
   COLLECTION = 'seating',
   JWT_SECRET, // sign session JWTs — generate: openssl rand -hex 32
   GOOGLE_CLIENT_ID, // from Google Cloud Console (OAuth 2.0 Web Client)
@@ -31,19 +31,7 @@ const {
   if (!v) throw new Error(`${k} env var is required`);
 });
 
-function parseAdminEmails(raw) {
-  return String(raw || '')
-    .split(',')
-    .map((s) =>
-      s
-        .trim()
-        .replace(/^['"]|['"]$/g, '')
-        .toLowerCase(),
-    )
-    .filter(Boolean);
-}
-
-const ADMIN_EMAIL_LOWER = parseAdminEmails(ADMIN_EMAIL);
+const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim();
 const SESSION_TTL = '8h';
 const DOC_ID = 'main_seating';
 
@@ -73,43 +61,7 @@ async function getCol() {
 
 // ── Seed document ─────────────────────────────────────────────────
 function seedDoc() {
-  return {
-    docId: DOC_ID,
-    config: {
-      name1: 'Rajat',
-      name2: 'Vinita',
-      date: 'Sunday, April 19th, 2026',
-      venue: 'The Grand Ballroom',
-    },
-    tables: [
-      { id: 't1', name: 'Table 1', x: 1029, y: 674, seats: [] },
-      { id: 't2', name: 'Table 2', x: 885, y: 674, seats: [] },
-      { id: 't3', name: 'Table 3', x: 726, y: 558, seats: [] },
-      { id: 't4', name: 'Table 4', x: 726, y: 674, seats: [] },
-      { id: 't5', name: 'Table 5', x: 596, y: 674, seats: [] },
-      { id: 't6', name: 'Table 6', x: 596, y: 558, seats: [] },
-      { id: 't7', name: 'Table 7', x: 467, y: 647, seats: [] },
-      { id: 't8', name: 'Table 8', x: 326, y: 647, seats: [] },
-      { id: 't9', name: 'Table 9', x: 498, y: 506, seats: [] },
-      { id: 't10', name: 'Table 10', x: 380, y: 506, seats: [] },
-      { id: 't11', name: 'Table 11', x: 236, y: 506, seats: [] },
-      { id: 't12', name: 'Table 12', x: 498, y: 371, seats: [] },
-      { id: 't13', name: 'Table 13', x: 380, y: 371, seats: [] },
-      { id: 't14', name: 'Table 14', x: 236, y: 371, seats: [] },
-      { id: 't15', name: 'Table 15', x: 236, y: 236, seats: [] },
-      { id: 't16', name: 'Table 16', x: 380, y: 236, seats: [] },
-      { id: 't17', name: 'Table 17', x: 488, y: 236, seats: [] },
-      { id: 't18', name: 'Table 18', x: 326, y: 90, seats: [] },
-      { id: 't19', name: 'Table 19', x: 455, y: 90, seats: [] },
-      { id: 't20', name: 'Table 20', x: 630, y: 195, seats: [] },
-      { id: 't21', name: 'Table 21', x: 630, y: 90, seats: [] },
-      { id: 't22', name: 'Table 22', x: 771, y: 195, seats: [] },
-      { id: 't23', name: 'Table 23', x: 815, y: 90, seats: [] },
-      { id: 't24', name: 'Table 24', x: 923, y: 195, seats: [] },
-      { id: 't25', name: 'Table 25', x: 1017, y: 90, seats: [] },
-    ],
-    updatedAt: new Date(),
-  };
+  return {};
 }
 
 // ── Express ───────────────────────────────────────────────────────
@@ -140,9 +92,11 @@ function requireAdmin(req, res, next) {
     req.admin = p;
     next();
   } catch {
-    res.status(401).json({
-      error: 'Session token invalid or expired — please sign in again',
-    });
+    res
+      .status(401)
+      .json({
+        error: 'Session token invalid or expired — please sign in again',
+      });
   }
 }
 
@@ -204,10 +158,8 @@ app.post(
     }
 
     const email = (gPayload.email || '').toLowerCase().trim();
-    console.log(`Email: ${email}`);
 
-    if (email && !ADMIN_EMAIL_LOWER.includes(email)) {
-      console.log(`${email} is not authorised as admin for this wedding.`);
+    if (email !== ADMIN_EMAIL_LOWER) {
       return res.status(403).json({
         error: `${gPayload.email} is not authorised as admin for this wedding.`,
       });
@@ -423,7 +375,6 @@ app.use((err, _req, res, _next) => {
 
 app.listen(PORT, () => {
   console.log(`✦ Wedding API  port=${PORT}  admin=${ADMIN_EMAIL}`);
-  console.log(`Admin emails: ${JSON.stringify(ADMIN_EMAIL_LOWER)}`);
 });
 
 function uid() {
