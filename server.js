@@ -31,7 +31,7 @@ const {
   if (!v) throw new Error(`${k} env var is required`);
 });
 
-const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim();
+const ADMIN_EMAIL_LOWER = ADMIN_EMAIL.toLowerCase().trim().split(',');
 const SESSION_TTL = '8h';
 const DOC_ID = 'main_seating';
 
@@ -92,11 +92,9 @@ function requireAdmin(req, res, next) {
     req.admin = p;
     next();
   } catch {
-    res
-      .status(401)
-      .json({
-        error: 'Session token invalid or expired — please sign in again',
-      });
+    res.status(401).json({
+      error: 'Session token invalid or expired — please sign in again',
+    });
   }
 }
 
@@ -159,7 +157,7 @@ app.post(
 
     const email = (gPayload.email || '').toLowerCase().trim();
 
-    if (email !== ADMIN_EMAIL_LOWER) {
+    if (!ADMIN_EMAIL_LOWER.includes(email)) {
       return res.status(403).json({
         error: `${gPayload.email} is not authorised as admin for this wedding.`,
       });
